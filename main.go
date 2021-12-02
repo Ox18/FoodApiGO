@@ -2,9 +2,19 @@ package main
 
 import (
 	"log"
-	"net/http"
+
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	app := fiber.New()
+	app.Use(cors.New())
+
+	api := app.Group("/api")
+	api.Get("/", func(c *fiber.Ctx) error {
+		return c.SendString("Hello World")
+	})
+
+	log.Fatal(app.Listen(":3000"))
 }
